@@ -35,65 +35,49 @@ keras 实现
 TensorFlow backend.
 
 Embedding
-    in:    word_index + 1        out:    200
+	in:	word_index + 1		out:	200
 Dropout
-    probability = 0.2
+	probability = 0.2
 Conv1D
-    filters: 250    kernel_size = 3, no padding, activation='relu', strides=1
+	filters: 250	kernel_size = 3, no padding, activation='relu', strides=1
 MaxPooling1D
-    kernel_size = 3, strides = kernel_size, no padding
+	kernel_size = 3, strides = kernel_size, no padding
 Flatten()
-Dense    (name = fc1)    
-    units = 200        activation='relu'
-Dense    (name = fc2)    
-    units = 200        activation='relu'
+Dense	(name = fc1)	
+	units = 200		activation='relu'
+Dense	(name = fc2)	
+	units = 200		activation='relu'
 Dense
-    units = 8 (class_number)    activation='softmax'
+	units = 8 (class_number)	activation='softmax'
 
-
-_________________________________________________________________
 Layer (type)                 Output Shape              Param #   
-=================================================================
 embedding_1 (Embedding)      (None, 100, 200)          7053800   
-_________________________________________________________________
 dropout_1 (Dropout)          (None, 100, 200)          0         
-_________________________________________________________________
 conv1d_1 (Conv1D)            (None, 98, 250)           150250    
-_________________________________________________________________
 max_pooling1d_1 (MaxPooling1 (None, 32, 250)           0         
-_________________________________________________________________
 flatten_1 (Flatten)          (None, 8000)              0         
-_________________________________________________________________
 fc1 (Dense)                  (None, 200)               1600200   
-_________________________________________________________________
 fc2 (Dense)                  (None, 200)               40200     
-_________________________________________________________________
 dense_1 (Dense)              (None, 8)                 1608      
-=================================================================
 Total params: 8,846,058
 
-epoch = 6    batch_size = 128
+epoch = 6	batch_size = 128
 
-测试集上    acc = 0.79
+测试集上	acc = 0.79
 整个数据集上 acc = 0.92
 
 lstm
 
 
 Layer (type)                 Output Shape              Param #   
-=================================================================
 embedding_1 (Embedding)      (None, 100, 200)          7053800   
-_________________________________________________________________
 lstm_1 (LSTM)                (None, 200)               320800    
-_________________________________________________________________
 dropout_1 (Dropout)          (None, 200)               0         
-_________________________________________________________________
 fc1 (Dense)                  (None, 200)               40200     
-_________________________________________________________________
 dense_1 (Dense)              (None, 8)                 1608      
-=================================================================
 Total params: 7,416,408
-Epoch = 10         batch_size = 128
+
+Epoch = 10 		batch_size = 128
 record
 Epoch 1/10
  loss: 2.3138 - acc: 0.1606 - val_loss: 2.0209 - val_acc: 0.2438
@@ -117,72 +101,66 @@ Epoch 10/10
  loss: 0.4699 - acc: 0.8469 - val_loss: 1.2109 - val_acc: 0.5616
  
 测试集
-        loss            acc
+		loss			acc
 [1.194813983482227, 0.5855263157894737]
 
 
 
 特征提取
-    
-    图片特征提取
-    
-        vgg16在imagenet上训练
-        使用vgg16 提取 
-        http://press.liacs.nl/mirflickr/
-        中images0.zip 1万张图片
-        fc1层的输出(dim = 4096)
-        自编码器
-            ae_input = Input(shape=(4096,))
+	
+	图片特征提取
+	
+		vgg16在imagenet上训练
+		使用vgg16 提取 
+		http://press.liacs.nl/mirflickr/
+		中images0.zip 1万张图片
+		fc1层的输出(dim = 4096)
+		自编码器
+			ae_input = Input(shape=(4096,))
 
-            encoded = Dense(1024, activation='relu')(ae_input)
-            encoded = Dense(256, activation='relu')(encoded)
-            encoded = Dense(64, activation='relu')(encoded)
-            encoded = Dense(32, activation='relu')(encoded)
+			encoded = Dense(1024, activation='relu')(ae_input)
+			encoded = Dense(256, activation='relu')(encoded)
+			encoded = Dense(64, activation='relu')(encoded)
+			encoded = Dense(32, activation='relu')(encoded)
 
-            encoder_output = Dense(10)(encoded)
+			encoder_output = Dense(10)(encoded)
 
-            decoded = Dense(32, activation='relu')(encoder_output)
-            decoded = Dense(64, activation='relu')(decoded)
-            decoded = Dense(256, activation='relu')(decoded)
-            decoded = Dense(1024, activation='relu')(decoded)
-            decoded = Dense(4096, activation='relu')(decoded)
-        
-        optimizer='adadelta', loss='mse'
-        输出10维向量作为图片特征
-        
-        对每篇新闻正文中的第一张图片进行特征提取得到10维向量并作正则化处理
-        
-    文本特征
-        
-        将原始新闻文本 使用 结巴中文分词    精确模式
-        进行分词
-        http://www.oss.io/p/fxsjy/jieba
-    
-        以之前cnn_model的fc1层输出作为文本特征(dim = 200)
-            {测试集上    acc = 0.79
-            整个数据集上 acc = 0.92}
-        
-    
+			decoded = Dense(32, activation='relu')(encoder_output)
+			decoded = Dense(64, activation='relu')(decoded)
+			decoded = Dense(256, activation='relu')(decoded)
+			decoded = Dense(1024, activation='relu')(decoded)
+			decoded = Dense(4096, activation='relu')(decoded)
+		
+		optimizer='adadelta', loss='mse'
+		输出10维向量作为图片特征
+		
+		对每篇新闻正文中的第一张图片进行特征提取得到10维向量并作正则化处理
+		
+	文本特征
+		
+		将原始新闻文本 使用 结巴中文分词	精确模式
+		进行分词
+		http://www.oss.io/p/fxsjy/jieba
+	
+		以之前cnn_model的fc1层输出作为文本特征(dim = 200)
+			{测试集上	acc = 0.79
+			整个数据集上 acc = 0.92}
+		
+	
 将图片特征向量与文本特征向量连结 (dim = 210)
 
 送mlp多层感知机
 
-Dense    (name = fc1)    
-    in : 210    out : 200    activation='relu'
+Dense	(name = fc1)	
+	in : 210	out : 200	activation='relu'
 Dropout
-    probability = 0.2
+	probability = 0.2
 Dense
-    units = 8 (class_number)    activation='softmax'
-
-    _________________________________________________________________
+	units = 8 (class_number)	activation='softmax'
 Layer (type)                 Output Shape              Param #   
-=================================================================
 dense_1 (Dense)              (None, 200)               42200     
-_________________________________________________________________
 dropout_1 (Dropout)          (None, 200)               0         
-_________________________________________________________________
 dense_2 (Dense)              (None, 8)                 1608      
-=================================================================
 Total params: 43,808
 
 
@@ -191,7 +169,7 @@ epochs=6, batch_size=128
 record
 
 Epoch 1/6
-    loss: 0.9604 - acc: 0.7687 - val_loss: 0.4710 - val_acc: 0.8740
+	loss: 0.9604 - acc: 0.7687 - val_loss: 0.4710 - val_acc: 0.8740
 Epoch 2/6
  loss: 0.4187 - acc: 0.9039 - val_loss: 0.3356 - val_acc: 0.9151
 Epoch 3/6
@@ -204,52 +182,52 @@ Epoch 6/6
 loss: 0.2586 - acc: 0.9204 - val_loss: 0.2610 - val_acc: 0.9233
 
 测试集
-        loss                acc
+		loss				acc
 [0.220075376723942, 0.9276315789473685]
 
 page2word_all.py
-    将读取的新闻 使用 结巴中文分词    精确模式
-    进行分词
-    http://www.oss.io/p/fxsjy/jieba
+	将读取的新闻 使用 结巴中文分词	精确模式
+	进行分词
+	http://www.oss.io/p/fxsjy/jieba
 
-    
+	
 cnn_model.py
-    简单cnn模型对中文文本分类，模型及参数保存至cnn_model.h5
+	简单cnn模型对中文文本分类，模型及参数保存至cnn_model.h5
 
 0.74/
 0.76/
 0.79/
 三份cnn_model备份，测试集精度分别为0.74,0.76,0.79
-    
+	
 image2vec
-    将图片经vgg16、自编码器得到特征向量(dim = 10)
-    输出至 vec_img.txt
+	将图片经vgg16、自编码器得到特征向量(dim = 10)
+	输出至 vec_img.txt
 
 text2vec.py
-    将分词后的文本经cnn_model输出文本特征向量(dim = 200)
-    输出至 vec_text.txt
+	将分词后的文本经cnn_model输出文本特征向量(dim = 200)
+	输出至 vec_text.txt
 
-    
+	
 vec_img.txt vec_text.txt bel.txt
 为对新闻提取的图片与新闻向量
 
 shuffle.py
-    爬取的数据集类别按顺序排列
-    shuffle将数据集打乱
-    并分割train/test
-    输出至dataset_vec/
+	爬取的数据集类别按顺序排列
+	shuffle将数据集打乱
+	并分割train/test
+	输出至dataset_vec/
 
 mlp_all.py
-    以提取的图片、文本特征向量作为输入
-    使用多层感知机进行分类
-    
+	以提取的图片、文本特征向量作为输入
+	使用多层感知机进行分类
+	
 
-    
+	
 /imgetransfer
-    前期图片特征提取代码
+	前期图片特征提取代码
 /eztexttrans
-    前期文本特征提取代码    
+	前期文本特征提取代码	
 /dataset_vec
-    打乱并划分的特征数据集
+	打乱并划分的特征数据集
 /divide
-    分词测试代码
+	分词测试代码
