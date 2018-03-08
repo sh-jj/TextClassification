@@ -1,6 +1,5 @@
 # TextClassification
-结合图片作中文文本的标签分类
-结合图片的文本标签分类
+结合图片作中文文本的标签分类结合图片的文本标签分类
 
 数据集
 patch.zip
@@ -35,9 +34,9 @@ keras 实现
 TensorFlow backend.
 
 Embedding
-	in:	word_index + 1		out:	200
+		in:	word_index + 1		out:	200
 Dropout
-	probability = 0.2
+		probability = 0.2
 Conv1D
 	filters: 250	kernel_size = 3, no padding, activation='relu', strides=1
 MaxPooling1D
@@ -48,7 +47,7 @@ Dense	(name = fc1)
 Dense	(name = fc2)	
 	units = 200		activation='relu'
 Dense
-	units = 8 (class_number)	activation='softmax'
+		units = 8 (class_number)	activation='softmax'
 
 Layer (type)                 Output Shape              Param #   
 embedding_1 (Embedding)      (None, 100, 200)          7053800   
