@@ -1,12 +1,7 @@
 # TextClassification
 结合图片作中文文本的标签分类
 
-
 结合图片的文本标签分类
-
-
-
-
 
 数据集
 patch.zip
